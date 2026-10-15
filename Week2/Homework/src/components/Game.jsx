@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { LEVEL_CHOICE } from "../level";
 import { createNumbers, random } from "../number";
@@ -41,7 +41,7 @@ const Cell = styled.button`
   }
 `;
 
-const Game = ({level}) => {
+const Game = ({level, onTimeChange}) => {
   const { size, maxNumber } = LEVEL_CHOICE[level];
   const count = size * size;
 
@@ -49,8 +49,17 @@ const Game = ({level}) => {
   const [queue, setQueue] = useState(() => random(createNumbers(count + 1, maxNumber)));
   const [nextNumber, setNextNumber] = useState(1);
 
+  const [isPlaying, setIsPlaying] = useState(false);
+  const startTime = useRef(0);
+
   const Click = (index) => {
-    if (board[index] !== nextNumber) return;
+    if (board[index] !== nextNumber) 
+      return;
+
+    if(nextNumber === 1) {
+      startTime.current = Date.now();
+      setIsPlaying(true);
+    }
 
     const newBoard = [...board];
     newBoard[index] = queue.length > 0 ? queue[0] : null;
@@ -59,6 +68,17 @@ const Game = ({level}) => {
     setQueue(queue.slice(1));
     setNextNumber(nextNumber + 1);
   }
+
+  useEffect(() => {
+    if(!isPlaying)
+      return;
+
+    const presstime = setInterval(() => {
+      const time = (Date.now() - startTime.current) / 1000;
+      onTimeChange(time);
+    }, 10);
+    return () => clearInterval(presstime);
+  }, [isPlaying, onTimeChange]);
 
   return (
     <Wrapper>

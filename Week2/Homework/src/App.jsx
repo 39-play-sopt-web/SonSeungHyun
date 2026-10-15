@@ -26,7 +26,11 @@ function App() {
         onLevelChange={handleLevelChange}
       />
       <main>
-        {menu === "game" ? <Game level={level} /> : <Ranking />}
+        {menu === "game" ? (
+          <Game level={level} onTimeChange={setTime} />
+        ) : (
+          <Ranking />
+        )}
       </main>
     </>
   );
