@@ -35,14 +35,30 @@ const Cell = styled.button`
   font-size: ${({ theme }) => theme.fonts.md};
   font-weight: 700;
   cursor: pointer;
+
+  &:disabled {
+    visibility: hidden;
+  }
 `;
 
 const Game = ({level}) => {
   const { size, maxNumber } = LEVEL_CHOICE[level];
   const count = size * size;
 
-  const [board, setBoard] = useState(() => random(createNumbers(1,count)));
+  const [board, setBoard] = useState(() => random(createNumbers(1, count)));
+  const [queue, setQueue] = useState(() => random(createNumbers(count + 1, maxNumber)));
   const [nextNumber, setNextNumber] = useState(1);
+
+  const Click = (index) => {
+    if (board[index] !== nextNumber) return;
+
+    const newBoard = [...board];
+    newBoard[index] = queue.length > 0 ? queue[0] : null;
+
+    setBoard(newBoard);
+    setQueue(queue.slice(1));
+    setNextNumber(nextNumber + 1);
+  }
 
   return (
     <Wrapper>
@@ -52,7 +68,12 @@ const Game = ({level}) => {
 
       <Board $size={size}>
         {board.map((number, index) => (
-          <Cell key={index} type="button">
+          <Cell 
+            key={index} 
+            type="button"
+            disabled={number === null}
+            onClick={() => Click(index)}
+          >
             {number}
           </Cell>
         ))}

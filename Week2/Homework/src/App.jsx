@@ -26,7 +26,7 @@ function App() {
         onLevelChange={handleLevelChange}
       />
       <main>
-        {menu === "game" ? <Game /> : <Ranking />}
+        {menu === "game" ? <Game level={level} /> : <Ranking />}
       </main>
     </>
   );
