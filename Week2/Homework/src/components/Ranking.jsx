@@ -70,7 +70,7 @@ const format = (String) => new Date(String).toLocaleString("ko-KR", {
 
 const Ranking = () => {
   const [ranking, setRanking] = useState(() => getRanking());
-  const sortedRanking = ranking.toSorted((a, b) => a.time - b.time);
+  const sortedRanking = ranking.toSorted((a, b) => b.level - a.level || a.time - b.time);
   const handleClear = () => {
     clearRanking();
     setRanking([]);
