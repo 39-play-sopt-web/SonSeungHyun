@@ -23,19 +23,24 @@ const NextInfo = styled.p`
 
 const Board = styled.div`
   display: grid;
-  grid-template-columns: repeat(${({ $size }) => $size}, 72px);
+  grid-template-columns: repeat(${({ $size }) => $size}, 100px);
   gap: 6px;
 `;
 
 const Cell = styled.button`
-  width: 72px;
-  height: 72px;
+  width: 100px;
+  height: 100px;
   border: none;
   border-radius: ${({ theme }) => theme.radius};
   background-color: ${({ theme }) => theme.colors.white};
-  font-size: ${({ theme }) => theme.fonts.md};
+  font-size: ${({ theme }) => theme.fonts.xl};
   font-weight: 700;
   cursor: pointer;
+
+  transition: background-color 0.1s;
+  &:active:not(:disabled) {
+    background-color: ${({ theme }) => theme.colors.bluegreen};
+  }
 
   &:disabled {
     visibility: hidden;

@@ -5,9 +5,10 @@ export const theme = {
     black: "#222222",
     gray: "#dddddd",
     danger: "#ef4444",
+    bluegreen: "#21825B",
   },
   fonts: {
-    xl: "2rem",
+    xl: "1.75rem",
     lg: "1.25rem",
     md: "1rem",
     sm: "0.8125rem",
