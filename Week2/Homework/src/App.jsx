@@ -14,6 +14,7 @@ function App() {
 
   const handleLevelChange = (e) => {
     setLevel(Number(e.target.value));
+    setTime(0);
   };
 
   return (
@@ -27,7 +28,7 @@ function App() {
       />
       <main>
         {menu === "game" ? (
-          <Game level={level} onTimeChange={setTime} />
+          <Game key={level} level={level} onTimeChange={setTime} />
         ) : (
           <Ranking />
         )}

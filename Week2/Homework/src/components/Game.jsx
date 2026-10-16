@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { LEVEL_CHOICE } from "../level";
 import { createNumbers, random } from "../number";
+import { saveRanking } from "../ranking";
 
 const Wrapper = styled.section`
   display: flex;
@@ -53,8 +54,13 @@ const Game = ({level, onTimeChange}) => {
   const startTime = useRef(0);
 
   const Click = (index) => {
-    if (board[index] !== nextNumber) 
+    if (board[index] !== nextNumber)
       return;
+
+    if (nextNumber === maxNumber) {
+      finishGame();
+      return;
+    }
 
     if(nextNumber === 1) {
       startTime.current = Date.now();
@@ -79,6 +85,27 @@ const Game = ({level, onTimeChange}) => {
     }, 10);
     return () => clearInterval(presstime);
   }, [isPlaying, onTimeChange]);
+
+  const resetGame = () => {
+    setBoard(random(createNumbers(1, count)));
+    setQueue(random(createNumbers(count + 1, maxNumber)));
+    setNextNumber(1);
+    setIsPlaying(false);
+    onTimeChange(0);
+  };
+
+  const finishGame = () => {
+    const playTime = Number(((Date.now() - startTime.current) / 1000).toFixed(2));
+
+    saveRanking({
+      level,
+      time: playTime,
+      date: new Date().toISOString(),
+    });
+    alert(`게임이 종료되었습니다. 걸린 시간은 ${playTime.toFixed(2)}초 입니다.`);
+    resetGame();
+  }
+
 
   return (
     <Wrapper>
