@@ -13,8 +13,7 @@ const globalStyle = css`
     min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     color: ${theme.colors.black};
-    background: linear-gradient(135deg, #b2f5ff 0%, #6ff0b0 100%);
-    background-attachment: fixed;
+    background-color: #a7b2f3
   }
 
   button,
