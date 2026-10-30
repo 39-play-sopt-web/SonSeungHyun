@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router';
 import type { Movie } from '../types/movieType';
+import { POSTER_BASE_URL } from '../image';
 
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 const formatDate = (date: string) => {
   if (!date) 
@@ -22,7 +22,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
     <Card to={`/movies/${id}`}>
       <PosterWrapper>
         {poster_path ? (
-          <Poster src={`${IMAGE_BASE_URL}${poster_path}`} alt={title} />
+          <Poster src={`${POSTER_BASE_URL}${poster_path}`} alt={title} />
         ) : (
           <NoPoster>이미지 없음</NoPoster>
         )}

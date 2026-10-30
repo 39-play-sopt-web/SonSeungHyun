@@ -1,5 +1,5 @@
 import apiClient from './apiClient';
-import type { MovieListResponse } from '../types/movieType';
+import type { MovieDetail, MovieListResponse } from '../types/movieType';
 
 interface GetMoviesParams {
     page: number;
@@ -12,4 +12,9 @@ export const getMovies = async({page, min, max}: GetMoviesParams) => {
         params: {page, 'vote_average.gte': min, 'vote_average.lte': max },
     });
     return res.data;
+};
+
+export const getMovieById = async (movieId: string) => {
+  const res = await apiClient.get<MovieDetail>(`/movie/${movieId}`);
+  return res.data;
 };
