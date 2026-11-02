@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { LEVEL_CHOICE } from "../level";
 import { createNumbers, random } from "../number";
 import { saveRanking } from "../ranking";
+import Modal from "./Modal";
 
 const Wrapper = styled.section`
   display: flex;
@@ -30,7 +31,7 @@ const Board = styled.div`
   gap: ${GAP}px;
   width: min(
     100% - 32px,
-    ${({ $size }) => $size * 100 + ($size - 1) * 6}px
+    ${({ $size }) => $size * CELL + ($size - 1) * 6}px
   );
 `;
 
@@ -54,6 +55,25 @@ const Cell = styled.button`
   }
 `;
 
+const ModalTitle = styled.h2`
+  margin: 0 0 8px;
+  font-size: ${({ theme }) => theme.fonts.lg};
+`;
+
+const ModalText = styled.p`
+  margin: 0 0 24px;
+  font-size: ${({ theme }) => theme.fonts.md};
+`;
+
+const ConfirmButton = styled.button`
+  padding: 8px 32px;
+  border: none;
+  border-radius: ${({ theme }) => theme.radius};
+  background-color: ${({ theme }) => theme.colors.primary};
+  font-weight: 700;
+  cursor: pointer;
+`;
+
 const Game = ({level, onTimeChange}) => {
   const { size, maxNumber } = LEVEL_CHOICE[level];
   const count = size * size;
@@ -63,6 +83,7 @@ const Game = ({level, onTimeChange}) => {
   const [nextNumber, setNextNumber] = useState(1);
 
   const [isPlaying, setIsPlaying] = useState(false);
+  const [result, setResult] = useState(null);
   const startTime = useRef(0);
 
   const Click = (index) => {
@@ -109,15 +130,20 @@ const Game = ({level, onTimeChange}) => {
   const finishGame = () => {
     const playTime = Number(((Date.now() - startTime.current) / 1000).toFixed(2));
 
+    setIsPlaying(false);
+    onTimeChange(playTime);
     saveRanking({
       level,
       time: playTime,
       date: new Date().toISOString(),
     });
-    alert(`게임이 종료되었습니다. 걸린 시간은 ${playTime.toFixed(2)}초 입니다.`);
-    resetGame();
-  }
+    setResult(playTime);
+  };
 
+  const handleConfirm = () => {
+    setResult(null);
+    resetGame();
+  };
 
   return (
     <Wrapper>
@@ -137,6 +163,15 @@ const Game = ({level, onTimeChange}) => {
           </Cell>
         ))}
       </Board>
+      {result !== null && (
+        <Modal>
+          <ModalTitle>게임 종료!</ModalTitle>
+          <ModalText>걸린 시간: {result.toFixed(2)}초</ModalText>
+          <ConfirmButton type="button" onClick={handleConfirm}>
+            확인
+          </ConfirmButton>
+        </Modal>
+      )}
     </Wrapper>
   );
 };
