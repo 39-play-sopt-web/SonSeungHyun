@@ -1,13 +1,19 @@
+const RANKING_KEY = "rankingKey";
+
 export const getRanking = () => {
-  const saved = localStorage.getItem("rankingKey");
-  return saved ? JSON.parse(saved) : [];
+  try {
+    const parsed = JSON.parse(localStorage.getItem(RANKING_KEY));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
 };
 
 export const saveRanking = (record) => {
   const rankings = getRanking();
-  localStorage.setItem("rankingKey", JSON.stringify([...rankings, record]));
+  localStorage.setItem(RANKING_KEY, JSON.stringify([...rankings, record]));
 };
 
 export const clearRanking = () => {
-  localStorage.removeItem("rankingKey");
+  localStorage.removeItem(RANKING_KEY);
 };

@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { LEVEL_CHOICE } from "../level";
 
 const Head = styled.header`
   position: sticky;
@@ -90,7 +91,7 @@ const Header = ({ menu, level, time, onMenuChange, onLevelChange }) => {
                 <Select value={level} onChange={onLevelChange}>
                     {LEVELS.map((lv) => (
                     <option key={lv} value={lv}>
-                        Level {lv} ({lv + 2}x{lv + 2})
+                      Level {lv} ({LEVEL_CHOICE[lv].size}x{LEVEL_CHOICE[lv].size})
                     </option>
                     ))}
                 </Select>

@@ -21,19 +21,26 @@ const NextInfo = styled.p`
   }
 `;
 
+const CELL = 100;
+const GAP = 6;
+
 const Board = styled.div`
   display: grid;
-  grid-template-columns: repeat(${({ $size }) => $size}, 100px);
-  gap: 6px;
+  grid-template-columns: repeat(${({ $size }) => $size}, 1fr);
+  gap: ${GAP}px;
+  width: min(
+    100% - 32px,
+    ${({ $size }) => $size * 100 + ($size - 1) * 6}px
+  );
 `;
 
 const Cell = styled.button`
   width: 100px;
-  height: 100px;
+  aspect-ratio: 1 / 1;
   border: none;
   border-radius: ${({ theme }) => theme.radius};
   background-color: ${({ theme }) => theme.colors.white};
-  font-size: ${({ theme }) => theme.fonts.xl};
+  font-size: clamp(16px, 5vw, ${({ theme }) => theme.fonts.xl});
   font-weight: 700;
   cursor: pointer;
 
