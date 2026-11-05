@@ -27,3 +27,10 @@ export type UpdatePostRequest = {
     title: string;
     content: string;
 };
+
+// GET /posts 쿼리 파라미터
+export type PostListParams = {
+  keyword?: string;
+  cursor?: number;
+  size?: number;
+};
