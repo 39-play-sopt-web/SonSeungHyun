@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import { postAuthCode } from '../apis/member';
 import { AUTH_CODE_KEY, PART_KEY } from '../constants/storage';
 import type { Part } from '../types/member';
+import { AUTH_REQUIRED_MESSAGE, hasAuthCode } from '../utils/auth';
 
 const PART_OPTIONS: { value: Part; label: string }[] = [
   { value: 'WEB', label: 'WEB' },
@@ -35,7 +36,16 @@ const AuthPage = () => {
     if (!part) return;
     mutate({ part });
   };
-return (
+
+  const handleGoToList = () => {
+    if (!hasAuthCode()) {
+      alert(AUTH_REQUIRED_MESSAGE);
+      return;
+    }
+    navigate('/posts');
+  };
+
+  return (
     <Wrapper>
       <Title>PLAY SOPT 게시판</Title>
       <Description>파트를 선택하면 코드가 발급됩니다.</Description>
@@ -56,7 +66,7 @@ return (
 
       {isError && <ErrorText>코드 발급에 실패했어요. 다시 시도해 주세요.</ErrorText>}
 
-      <ListButton onClick={() => navigate('/posts')}>게시판 목록 보기</ListButton>
+     <ListButton onClick={handleGoToList}>게시판 목록 보기</ListButton>
     </Wrapper>
   );
 };

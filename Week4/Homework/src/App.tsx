@@ -4,11 +4,13 @@ import AuthPage from './pages/AuthPage';
 import PostListPage from './pages/PostListPage';
 import PostWritePage from './pages/PostWritePage';
 import PostDetailPage from './pages/PostDetailPage';
+import { requireAuthLoader } from './utils/auth';
 
 const router = createBrowserRouter([
   { path: '/', element: <AuthPage /> },
    {
     element: <Layout />,
+    loader: requireAuthLoader,
     children: [
       { path: '/posts', element: <PostListPage /> },
       { path: '/posts/new', element: <PostWritePage /> },

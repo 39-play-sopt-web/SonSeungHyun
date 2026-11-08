@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { getPost, updatePost, deletePost } from '../apis/post';
+import { AUTH_REQUIRED_MESSAGE, hasAuthCode } from '../utils/auth';
 
 const PostDetailPage = () => {
   const navigate = useNavigate();
@@ -46,11 +47,23 @@ const PostDetailPage = () => {
     },
   });
 
+  const checkAuth = () => {
+    if (hasAuthCode()) return true;
+    alert(AUTH_REQUIRED_MESSAGE);
+    navigate('/');
+    return false;
+  };
+
   const handleEditStart = () => {
-    if (!data) return;
+    if (!data || !checkAuth()) return;
     setTitle(data.title);
     setContent(data.content);
     setIsEditing(true);
+  };
+
+  const handleDelete = () => {
+    if (!checkAuth()) return;
+    removePost(id);
   };
 
   const isFormValid = title.trim() !== '' && content.trim() !== '';
@@ -108,7 +121,7 @@ const PostDetailPage = () => {
 
         <ButtonRow>
           <SubButton type="button" onClick={handleEditStart}>수정</SubButton>
-          <MainButton type="button" onClick={() => removePost(id)} disabled={isDeleting}>
+          <MainButton type="button" onClick={handleDelete} disabled={isDeleting}>
             {isDeleting ? '삭제 중...' : '삭제'}
           </MainButton>
         </ButtonRow>
