@@ -27,7 +27,8 @@ const PostDetailPage = () => {
   const { mutate, isPending: isUpdating } = useMutation({
     mutationFn: updatePost,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: ['posts', 'list'] });
+      queryClient.invalidateQueries({ queryKey: ['posts', 'detail', id] });
       alert('게시글이 수정되었어요!');
       setIsEditing(false);
     },
