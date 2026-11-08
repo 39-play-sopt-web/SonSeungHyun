@@ -37,3 +37,9 @@ export const updatePost = async ({
   const response = await instance.put<ApiResponse<Post>>(`/posts/${postId}`, body);
   return response.data.data;
 };
+
+// DELETE /posts/{postId} (게시글 삭제)
+export const deletePost = async (postId: number) => {
+  const response = await instance.delete<ApiResponse<null>>(`/posts/${postId}`);
+  return response.data.data;
+};

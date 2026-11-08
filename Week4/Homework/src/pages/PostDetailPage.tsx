@@ -3,7 +3,7 @@ import type { SubmitEvent } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from '@emotion/styled';
-import { getPost, updatePost } from '../apis/post';
+import { getPost, updatePost, deletePost } from '../apis/post';
 
 const PostDetailPage = () => {
   const navigate = useNavigate();
@@ -31,6 +31,18 @@ const PostDetailPage = () => {
     },
     onError: () => {
       alert('게시글 수정에 실패했어요. 다시 시도해 주세요.');
+    },
+  });
+
+  const { mutate: removePost, isPending: isDeleting } = useMutation({
+    mutationFn: deletePost,
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ['posts', 'detail', id] });
+      queryClient.invalidateQueries({ queryKey: ['posts', 'list'] });
+      navigate('/posts', { replace: true });
+    },
+    onError: () => {
+      alert('게시글 삭제에 실패했어요. 다시 시도해 주세요.');
     },
   });
 
@@ -96,7 +108,9 @@ const PostDetailPage = () => {
 
         <ButtonRow>
           <SubButton type="button" onClick={handleEditStart}>수정</SubButton>
-          <MainButton type="button">삭제</MainButton>
+          <MainButton type="button" onClick={() => removePost(id)} disabled={isDeleting}>
+            {isDeleting ? '삭제 중...' : '삭제'}
+          </MainButton>
         </ButtonRow>
       </Card>
     );
