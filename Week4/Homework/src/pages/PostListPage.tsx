@@ -4,6 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { getPosts } from '../apis/post';
 import PostCard from '../components/PostCard';
+import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 
 const PostListPage = () => {
   const [inputValue, setInputValue] = useState('');
@@ -18,6 +19,8 @@ const PostListPage = () => {
       getNextPageParam: (lastPage) =>
         lastPage.hasNext ? (lastPage.nextCursor ?? undefined) : undefined,
     });
+
+  const observerRef = useInfiniteScroll(fetchNextPage, hasNextPage && !isFetchingNextPage);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -37,22 +40,18 @@ const PostListPage = () => {
     if (posts.length === 0) return <Message>게시글이 없어요.</Message>;
 
     return (
-    <>
-      <List>
-        {posts.map((post) => (
-          <li key={post.id}>
-            <PostCard post={post} />
-          </li>
-        ))}
-      </List>
+      <>
+        <List>
+          {posts.map((post) => (
+            <li key={post.id}>
+              <PostCard post={post} />
+            </li>
+          ))}
+        </List>
 
-      {hasNextPage && (
-        <MoreButton onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-          {isFetchingNextPage ? '불러오는 중...' : '더 보기'}
-        </MoreButton>
-      )}
-    </>
-  );
+        {isFetchingNextPage && <Message>불러오는 중...</Message>}
+      </>
+    );
   };
 
   return (
@@ -72,6 +71,7 @@ const PostListPage = () => {
       </SearchForm>
 
       {renderList()}
+      <div ref={observerRef} />
     </Wrapper>
   );
 };
@@ -127,13 +127,4 @@ const Message = styled.p`
   margin-top: 40px;
   text-align: center;
   color: ${({ theme }) => theme.colors.textSub};
-`;
-
-const MoreButton = styled.button`
-  width: 100%;
-  margin-top: 16px;
-  padding: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-  background: transparent;
 `;
