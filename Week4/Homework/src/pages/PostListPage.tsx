@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { SubmitEvent, ChangeEvent } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { getPosts } from '../apis/post';
 import PostCard from '../components/PostCard';
@@ -9,10 +9,15 @@ const PostListPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [keyword, setKeyword] = useState('');
 
-  const { data, isPending, isError, error } = useQuery({
-    queryKey: ['posts', 'list', keyword],
-    queryFn: () => getPosts({ keyword }),
-  });
+  const { data, isPending, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['posts', 'list', keyword],
+      queryFn: ({ pageParam }: { pageParam: number | undefined }) =>
+        getPosts({ keyword, cursor: pageParam }),
+      initialPageParam: undefined,
+      getNextPageParam: (lastPage) =>
+        lastPage.hasNext ? (lastPage.nextCursor ?? undefined) : undefined,
+    });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -27,17 +32,27 @@ const PostListPage = () => {
   const renderList = () => {
     if (isPending) return <Message>불러오는 중...</Message>;
     if (isError) return <Message>에러: {error.message}</Message>;
-    if (data.posts.length === 0) return <Message>게시글이 없어요.</Message>;
+
+    const posts = data.pages.flatMap((page) => page.posts);
+    if (posts.length === 0) return <Message>게시글이 없어요.</Message>;
 
     return (
+    <>
       <List>
-        {data.posts.map((post) => (
+        {posts.map((post) => (
           <li key={post.id}>
             <PostCard post={post} />
           </li>
         ))}
       </List>
-    );
+
+      {hasNextPage && (
+        <MoreButton onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+          {isFetchingNextPage ? '불러오는 중...' : '더 보기'}
+        </MoreButton>
+      )}
+    </>
+  );
   };
 
   return (
@@ -112,4 +127,13 @@ const Message = styled.p`
   margin-top: 40px;
   text-align: center;
   color: ${({ theme }) => theme.colors.textSub};
+`;
+
+const MoreButton = styled.button`
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: transparent;
 `;
