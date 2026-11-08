@@ -89,6 +89,7 @@ const PostDetailPage = () => {
           <Field>
             <Label htmlFor="title">제목</Label>
             <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <Counter>{title.length} / 50</Counter>
           </Field>
 
           <Field>
@@ -98,6 +99,7 @@ const PostDetailPage = () => {
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
+            <Counter>{content.length} / 1000</Counter>
           </Field>
 
           <ButtonRow>
@@ -264,4 +266,10 @@ const Textarea = styled.textarea`
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
   }
+`;
+
+const Counter = styled.span`
+  align-self: flex-end;
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.textSub};
 `;
