@@ -9,7 +9,7 @@ const PostDetailPage = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const id = Number(postId);
-  const isValidId = Number.isInteger(id) && id > 0;
+  const isValidId = Number.isInteger(id);
 
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
