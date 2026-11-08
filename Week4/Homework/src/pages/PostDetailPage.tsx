@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { getPost, updatePost, deletePost } from '../apis/post';
 import { AUTH_REQUIRED_MESSAGE, hasAuthCode } from '../utils/auth';
+import {formatDate} from '../utils/date';
 
 const PostDetailPage = () => {
   const navigate = useNavigate();
@@ -115,7 +116,7 @@ const PostDetailPage = () => {
         <Title>{data.title}</Title>
         <Meta>
           <Author>{data.author}</Author>
-          <time dateTime={data.createdAt}>{data.createdAt}</time>
+          <time dateTime={data.createdAt}>{formatDate(data.createdAt)}</time>
         </Meta>
         <Content>{data.content}</Content>
 

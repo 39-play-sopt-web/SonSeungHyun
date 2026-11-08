@@ -1,19 +1,11 @@
 import { useNavigate } from 'react-router';
 import styled from '@emotion/styled';
 import type { Post } from '../types/post';
+import {formatDate} from '../utils/date';
 
 type PostCardProps = {
   post: Post;
 };
-
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
 
 const PostCard = ({ post }: PostCardProps) => {
   const navigate = useNavigate();
