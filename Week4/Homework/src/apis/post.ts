@@ -19,3 +19,21 @@ export const createPost = async (body: CreatePostRequest) => {
   const response = await instance.post<ApiResponse<Post>>('/posts', body);
   return response.data.data;
 };
+
+// GET /posts/{postId} (게시글 상세 조회)
+export const getPost = async (postId: number) => {
+  const response = await instance.get<ApiResponse<Post>>(`/posts/${postId}`);
+  return response.data.data;
+};
+
+// PUT /posts{postId} (게시글 수정)
+export const updatePost = async ({
+  postId,
+  body
+}: {
+  postId: number;
+  body: UpdatePostRequest;
+}) => {
+  const response = await instance.put<ApiResponse<Post>>(`/posts/${postId}`, body);
+  return response.data.data;
+};

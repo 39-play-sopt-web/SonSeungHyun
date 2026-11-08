@@ -6,27 +6,24 @@ import { getPosts } from '../apis/post';
 import PostCard from '../components/PostCard';
 
 const PostListPage = () => {
-  const [inputValue, setInputValue] = useState(''); // 입력창에 보이는 값
-  const [keyword, setKeyword] = useState('');       // 실제로 검색한 값
+  const [inputValue, setInputValue] = useState('');
+  const [keyword, setKeyword] = useState('');
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ['posts', 'list', keyword], // keyword가 바뀌면 새 쿼리로 인식
+    queryKey: ['posts', 'list', keyword],
     queryFn: () => getPosts({ keyword }),
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    // 입력을 다 지우면 버튼이 비활성화되므로, 여기서 전체 목록으로 되돌림
     if (e.target.value.trim() === '') setKeyword('');
   };
 
-  // form의 submit이라 버튼 클릭과 Enter 모두 동작
   const handleSearch = (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault(); // 새로고침 방지
+    e.preventDefault();
     setKeyword(inputValue.trim());
   };
 
-  // 목록 영역만 상태에 따라 바꿈 (검색창은 항상 유지)
   const renderList = () => {
     if (isPending) return <Message>불러오는 중...</Message>;
     if (isError) return <Message>에러: {error.message}</Message>;
@@ -51,7 +48,7 @@ const PostListPage = () => {
           value={inputValue}
           onChange={handleInputChange}
           placeholder="제목으로 검색"
-          maxLength={50} // 서버 제한: 2~50자
+          maxLength={50}
           aria-label="게시글 제목 검색"
         />
         <SearchButton type="submit" disabled={inputValue.trim() === ''}>
