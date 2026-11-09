@@ -2,14 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import styled from '@emotion/styled';
 import { getMovieById } from '../apis/movie';
-import { BACKDROP_BASE_URL, POSTER_BASE_URL } from '../image';
+import { BACKDROP_BASE_URL, POSTER_BASE_URL } from '../constants/image';
 import type { MovieDetail as MovieDetailType } from '../types/movieType';
-
-const formatDate = (date: string) => {
-  if (!date) return '개봉일 미정';
-  const [year, month, day] = date.split('-');
-  return `${year}년 ${Number(month)}월 ${Number(day)}일`;
-};
+import { formatDate } from '../utils/formatDate';
 
 const formatRuntime = (runtime: number | null) => {
   if (!runtime) return '상영 시간 미정';

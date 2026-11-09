@@ -3,10 +3,10 @@ import styled from '@emotion/styled';
 export const RATINGS = [
   { label: '전체', min: 0, max: 10 },
   { label: '9점 이상', min: 9, max: 10 },
-  { label: '8 ~ 9점', min: 8, max: 9 },
-  { label: '7 ~ 8점', min: 7, max: 8 },
-  { label: '6 ~ 7점', min: 6, max: 7 },
-  { label: '6점 미만', min: 0, max: 6 },
+  { label: '8 ~ 9점', min: 8, max: 8.999 },
+  { label: '7 ~ 8점', min: 7, max: 7.999 },
+  { label: '6 ~ 7점', min: 6, max: 6.999 },
+  { label: '6점 미만', min: 0, max: 5.999 },
  ] as const;
 
 export type RatingType = (typeof RATINGS)[number];

@@ -1,15 +1,8 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router';
 import type { Movie } from '../types/movieType';
-import { POSTER_BASE_URL } from '../image';
-
-
-const formatDate = (date: string) => {
-  if (!date) 
-    return '개봉일 미정';
-  const [year, month, day] = date.split('-');
-  return `${year}년 ${Number(month)}월 ${Number(day)}일`;
-};
+import { POSTER_BASE_URL } from '../constants/image';
+import { formatDate } from '../utils/formatDate';
 
 interface MovieCardProps {
   movie: Movie;
