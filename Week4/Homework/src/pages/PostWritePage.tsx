@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { createPost } from '../apis/post';
 import type { CreatePostRequest } from '../types/post';
+import { POST_MAX_LENGTH } from '../constants/post';
 
 type Step = {
   key: keyof CreatePostRequest;
@@ -20,24 +21,24 @@ const STEPS: Step[] = [
     key: 'title',
     label: '제목',
     placeholder: '제목을 입력하세요',
-    maxLength: 50,
-    errorMessage: '제목은 50자가 넘어가면 안됩니다!!',
+    maxLength: POST_MAX_LENGTH.title,
+    errorMessage: `제목은 ${POST_MAX_LENGTH.title}자가 넘어가면 안됩니다!!`,
     multiline: false,
   },
   {
     key: 'content',
     label: '본문',
     placeholder: '본문을 입력하세요',
-    maxLength: 1000,
-    errorMessage: '본문은 1000자가 넘어가면 안됩니다!!',
+    maxLength: POST_MAX_LENGTH.content,
+    errorMessage: `본문은 ${POST_MAX_LENGTH.content}자가 넘어가면 안됩니다!!`,
     multiline: true,
   },
   {
     key: 'author',
     label: '작성자',
     placeholder: '작성자 닉네임을 입력하세요',
-    maxLength: 20,
-    errorMessage: '작성자 닉네임은 20자를 넘어가면 안됩니다!!',
+    maxLength: POST_MAX_LENGTH.author,
+    errorMessage: `작성자 닉네임은 ${POST_MAX_LENGTH.author}자를 넘어가면 안됩니다!!`,
     multiline: false,
   },
 ];

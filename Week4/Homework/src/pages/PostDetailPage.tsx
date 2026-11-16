@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import { getPost, updatePost, deletePost } from '../apis/post';
 import { AUTH_REQUIRED_MESSAGE, hasAuthCode } from '../utils/auth';
 import {formatDate} from '../utils/date';
+import { POST_MAX_LENGTH } from '../constants/post';
 
 const PostDetailPage = () => {
   const navigate = useNavigate();
@@ -69,7 +70,11 @@ const PostDetailPage = () => {
   removePost(id);
 };
 
-  const isFormValid = title.trim() !== '' && content.trim() !== '';
+  const isFormValid =
+  title.trim() !== '' &&
+  content.trim() !== '' &&
+  title.length <= POST_MAX_LENGTH.title &&
+  content.length <= POST_MAX_LENGTH.content;
 
   const handleUpdate = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -90,7 +95,7 @@ const PostDetailPage = () => {
           <Field>
             <Label htmlFor="title">제목</Label>
             <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <Counter>{title.length} / 50</Counter>
+            <Counter>{title.length} / {POST_MAX_LENGTH.title}</Counter>
           </Field>
 
           <Field>
@@ -100,7 +105,7 @@ const PostDetailPage = () => {
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
-            <Counter>{content.length} / 1000</Counter>
+            <Counter>{content.length} / {POST_MAX_LENGTH.content}</Counter>
           </Field>
 
           <ButtonRow>
@@ -215,6 +220,11 @@ const MainButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.background};
   font-weight: 700;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 `;
 
 const Message = styled.p`
