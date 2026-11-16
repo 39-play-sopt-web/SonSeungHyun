@@ -7,12 +7,7 @@ import { postAuthCode } from '../apis/member';
 import { AUTH_CODE_KEY, PART_KEY } from '../constants/storage';
 import type { Part } from '../types/member';
 import { AUTH_REQUIRED_MESSAGE, hasAuthCode } from '../utils/auth';
-
-const PART_OPTIONS: { value: Part; label: string }[] = [
-  { value: 'WEB', label: 'WEB' },
-  { value: 'IOS', label: 'iOS' },
-  { value: 'ANDROID', label: 'ANDROID' },
-];
+import { PART_OPTIONS } from '../constants/part';
 
 const AuthPage = () => {
   const navigate = useNavigate();
