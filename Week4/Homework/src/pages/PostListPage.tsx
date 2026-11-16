@@ -6,11 +6,13 @@ import { getPosts } from '../apis/post';
 import PostCard from '../components/PostCard';
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 
+const MIN_KEYWORD_LENGTH = 2;
+
 const PostListPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [keyword, setKeyword] = useState('');
 
-  const { data, isPending, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ['posts', 'list', keyword],
       queryFn: ({ pageParam }: { pageParam: number | undefined }) =>
@@ -34,7 +36,7 @@ const PostListPage = () => {
 
   const renderList = () => {
     if (isPending) return <Message>불러오는 중...</Message>;
-    if (isError) return <Message>에러: {error.message}</Message>;
+    if (isError) return <Message>게시글을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.</Message>;
 
     const posts = data.pages.flatMap((page) => page.posts);
     if (posts.length === 0) return <Message>게시글이 없어요.</Message>;
@@ -65,7 +67,7 @@ const PostListPage = () => {
           maxLength={50}
           aria-label="게시글 제목 검색"
         />
-        <SearchButton type="submit" disabled={inputValue.trim() === ''}>
+        <SearchButton type="submit" disabled={inputValue.trim().length < MIN_KEYWORD_LENGTH}>
           검색
         </SearchButton>
       </SearchForm>
