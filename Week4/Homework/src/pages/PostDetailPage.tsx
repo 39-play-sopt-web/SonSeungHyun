@@ -64,9 +64,10 @@ const PostDetailPage = () => {
   };
 
   const handleDelete = () => {
-    if (!checkAuth()) return;
-    removePost(id);
-  };
+  if (!checkAuth()) return;
+  if (!window.confirm('게시글을 삭제할까요?')) return;
+  removePost(id);
+};
 
   const isFormValid = title.trim() !== '' && content.trim() !== '';
 
