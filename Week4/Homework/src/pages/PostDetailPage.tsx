@@ -19,7 +19,7 @@ const PostDetailPage = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ['posts', 'detail', id],
     queryFn: () => getPost(id),
     enabled: isValidId,
@@ -85,7 +85,7 @@ const PostDetailPage = () => {
   const renderContent = () => {
     if (!isValidId) return <Message>잘못된 게시글 주소예요.</Message>;
     if (isPending) return <Message>불러오는 중...</Message>;
-    if (isError) return <Message>에러: {error.message}</Message>;
+    if (isError) return <Message>게시글을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.</Message>;
 
     if (isEditing) {
       return (
